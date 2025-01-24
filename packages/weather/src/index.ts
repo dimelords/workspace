@@ -1,2 +1,2 @@
-export { WeatherPlugin } from './WeatherPlugin';
+export * from './WeatherPlugin';
 export * from './types';

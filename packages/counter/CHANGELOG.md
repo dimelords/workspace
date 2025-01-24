@@ -1,5 +1,11 @@
 # @dimelords/counter-plugin
 
+## 2.3.0
+
+### Minor Changes
+
+- Star
+
 ## 2.2.0
 
 ### Minor Changes
