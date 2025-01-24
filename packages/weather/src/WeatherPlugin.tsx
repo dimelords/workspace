@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { PluginBase, Message, BasicMessageBus, Card, CardHeader, CardTitle, CardContent } from '@dimelords/shared';
+import { PluginBase, Message, Card, CardHeader, CardTitle, CardContent } from '@dimelords/shared';
 import '@dimelords/shared/styles.css';
 import { WeatherData, WeatherConfig } from './types';
 import { Cloud, Sun, CloudRain, CloudLightning } from 'lucide-react';
-
-const messageBus = new BasicMessageBus();
+import { sharedMessageBus } from '@dimelords/shared';
 
 const WEATHER_UPDATE = 'WEATHER_UPDATE';
 const COUNTER_UPDATE = 'COUNTER_UPDATE';
@@ -33,13 +32,14 @@ export class WeatherPlugin extends PluginBase<WeatherData, WeatherConfig> {
   }
 
   onUpdate(data: Partial<WeatherData>): void {
+    console.log('WeatherPlugin.onUpdate', data);
     this.data = { 
       ...this.data, 
       ...data,
       lastUpdate: new Date().toISOString() 
     };
 
-    messageBus.publish<WeatherData>({
+    sharedMessageBus.publish<WeatherData>({
       type: WEATHER_UPDATE,
       source: this.id,
       payload: this.data,
@@ -57,26 +57,29 @@ interface WeatherComponentProps {
 }
 
 function WeatherComponent({ plugin }: WeatherComponentProps) {
-  const { data, config } = plugin;
-  const [counterValue, setCounterValue] = useState<number>(0);
-
-  useEffect(() => {
-    const unsubscribe = messageBus.subscribe<{ value: number }>(
-      COUNTER_UPDATE,
-      (message: Message<{ value: number }>) => {
-        setCounterValue(message.payload.value);
-        
-        // Update temperature based on counter value (demo purpose)
-        const newTemp = 20 + (message.payload.value / 2);
-        plugin.onUpdate({
-          temperature: newTemp,
-          condition: getConditionForTemperature(newTemp, config?.tempThresholds)
-        });
-      }
-    );
-
-    return () => unsubscribe();
-  }, [plugin, config]);
+    const [data, setData] = useState(plugin.data); // Use state for plugin data
+    const [counterValue, setCounterValue] = useState<number>(0);
+  
+    useEffect(() => {
+        // Subscribe to counter updates
+        const unsubscribe = sharedMessageBus.subscribe<{ value: number }>(
+          COUNTER_UPDATE,
+          (message: Message<{ value: number }>) => {
+            setCounterValue(message.payload.value);
+    
+            // Update temperature and condition
+            const newTemp = 20 + message.payload.value / 2;
+            const updatedData = {
+              temperature: newTemp,
+              condition: getConditionForTemperature(newTemp, plugin.config?.tempThresholds),
+            };
+            plugin.onUpdate(updatedData);
+            setData({ ...plugin.data }); // Update local state
+          }
+        );
+    
+        return () => unsubscribe();
+      }, [plugin]);
 
   const WeatherIcon = getWeatherIcon(data.condition);
 
@@ -84,28 +87,18 @@ function WeatherComponent({ plugin }: WeatherComponentProps) {
     <Card className="w-[350px]">
       <CardHeader>
         <CardTitle className="flex justify-between items-center">
-          <span>{config?.location}</span>
+          <span>{plugin.config?.location}</span>
           <WeatherIcon className="h-6 w-6" />
         </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <span className="text-3xl font-bold">
-              {data.temperature.toFixed(1)}°C
-            </span>
-            <span className="text-muted-foreground capitalize">
-              {data.condition}
-            </span>
+            <span className="text-3xl font-bold">{data.temperature.toFixed(1)}°C</span>
+            <span className="text-muted-foreground capitalize">{data.condition}</span>
           </div>
-          
-          <div className="text-sm text-muted-foreground">
-            Counter value: {counterValue}
-          </div>
-          
-          <div className="text-sm text-muted-foreground">
-            Last updated: {new Date(data.lastUpdate).toLocaleTimeString()}
-          </div>
+          <div className="text-sm text-muted-foreground">Counter value: {counterValue}</div>
+          <div className="text-sm text-muted-foreground">Last updated: {new Date(data.lastUpdate).toLocaleTimeString()}</div>
         </div>
       </CardContent>
     </Card>

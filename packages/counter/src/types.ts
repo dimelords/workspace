@@ -1,4 +1,3 @@
-// types.ts
 export interface CounterData {
     value: number;
     increment: number;

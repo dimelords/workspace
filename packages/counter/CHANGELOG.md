@@ -1,5 +1,11 @@
 # @dimelords/counter-plugin
 
+## 2.6.0
+
+### Minor Changes
+
+- Messaging
+
 ## 2.5.0
 
 ### Minor Changes

@@ -1,11 +1,17 @@
-// CounterPlugin.tsx
 import React from 'react';
-import { PluginBase, BasicMessageBus, Card, CardHeader, CardTitle, CardContent, Button } from '@dimelords/shared';
+import {
+  PluginBase,
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  Button,
+} from '@dimelords/shared';
 import '@dimelords/shared/styles.css';
 import { CounterData, CounterConfig } from './types';
 import { Plus, Minus } from 'lucide-react';
+import { sharedMessageBus } from '@dimelords/shared';
 
-const messageBus = new BasicMessageBus();
 const COUNTER_UPDATE = 'COUNTER_UPDATE';
 
 export class CounterPlugin extends PluginBase<CounterData, CounterConfig> {
@@ -21,19 +27,20 @@ export class CounterPlugin extends PluginBase<CounterData, CounterConfig> {
       {
         initialValue: 0,
         defaultIncrement: 1,
-        ...config
-      }
+        ...config,
+      },
     );
   }
 
-  onUpdate(data: Partial<CounterData>): void {
+  onUpdate(data: Partial<CounterData>): void {    
     this.data = {
       ...this.data,
       ...data,
-      lastUpdate: new Date().toISOString()
+      lastUpdate: new Date().toISOString(),
     };
 
-    messageBus.publish({
+    console.log('CounterPlugin.onUpdate', this.data);
+    sharedMessageBus.publish({
       type: COUNTER_UPDATE,
       source: this.id,
       payload: { value: this.data.value },
@@ -51,15 +58,22 @@ interface CounterComponentProps {
 }
 
 function CounterComponent({ plugin }: CounterComponentProps) {
-  const { data } = plugin;
+  const [data, setData] = React.useState(plugin.data); // Use state to store plugin data
+
+  const handleUpdate = (newData: Partial<CounterData>) => {
+    console.log('CounterComponent.handleUpdate', newData);
+    plugin.onUpdate(newData);
+    setData({ ...plugin.data }); // Update local state with the plugin's updated data
+  };
 
   const handleIncrement = () => {
-    plugin.onUpdate({ value: data.value + data.increment });
+    handleUpdate({ value: data.value + data.increment });
+
   };
 
   const handleDecrement = () => {
-    plugin.onUpdate({ value: data.value - data.increment });
-  };
+    handleUpdate({ value: data.value - data.increment });
+};
 
   return (
     <Card className="w-[350px]">
