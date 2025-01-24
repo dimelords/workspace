@@ -1,10 +1,10 @@
 export interface CounterData {
-    value: number;
-    increment: number;
-    lastUpdate: string;
-  }
-  
-  export interface CounterConfig {
-    initialValue?: number;
-    defaultIncrement?: number;
-  }
+  value: number;
+  increment: number;
+  lastUpdate: string;
+}
+
+export interface CounterConfig {
+  initialValue?: number;
+  defaultIncrement?: number;
+}

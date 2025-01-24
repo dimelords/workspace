@@ -1,2 +1,2 @@
-export {CounterPlugin} from './CounterPlugin';
+export { CounterPlugin } from './CounterPlugin';
 export * from './types';

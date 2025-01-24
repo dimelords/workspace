@@ -24,19 +24,19 @@ export class WeatherPlugin extends PluginBase<WeatherData, WeatherConfig> {
           cold: 10,
           mild: 20,
           hot: 30,
-          ...config?.tempThresholds
+          ...config?.tempThresholds,
         },
-        ...config
-      }
+        ...config,
+      },
     );
   }
 
   onUpdate(data: Partial<WeatherData>): void {
     console.log('WeatherPlugin.onUpdate', data);
-    this.data = { 
-      ...this.data, 
+    this.data = {
+      ...this.data,
       ...data,
-      lastUpdate: new Date().toISOString() 
+      lastUpdate: new Date().toISOString(),
     };
 
     sharedMessageBus.publish<WeatherData>({
@@ -57,29 +57,29 @@ interface WeatherComponentProps {
 }
 
 function WeatherComponent({ plugin }: WeatherComponentProps) {
-    const [data, setData] = useState(plugin.data); // Use state for plugin data
-    const [counterValue, setCounterValue] = useState<number>(0);
-  
-    useEffect(() => {
-        // Subscribe to counter updates
-        const unsubscribe = sharedMessageBus.subscribe<{ value: number }>(
-          COUNTER_UPDATE,
-          (message: Message<{ value: number }>) => {
-            setCounterValue(message.payload.value);
-    
-            // Update temperature and condition
-            const newTemp = 20 + message.payload.value / 2;
-            const updatedData = {
-              temperature: newTemp,
-              condition: getConditionForTemperature(newTemp, plugin.config?.tempThresholds),
-            };
-            plugin.onUpdate(updatedData);
-            setData({ ...plugin.data }); // Update local state
-          }
-        );
-    
-        return () => unsubscribe();
-      }, [plugin]);
+  const [data, setData] = useState(plugin.data); // Use state for plugin data
+  const [counterValue, setCounterValue] = useState<number>(0);
+
+  useEffect(() => {
+    // Subscribe to counter updates
+    const unsubscribe = sharedMessageBus.subscribe<{ value: number }>(
+      COUNTER_UPDATE,
+      (message: Message<{ value: number }>) => {
+        setCounterValue(message.payload.value);
+
+        // Update temperature and condition
+        const newTemp = 20 + message.payload.value / 2;
+        const updatedData = {
+          temperature: newTemp,
+          condition: getConditionForTemperature(newTemp, plugin.config?.tempThresholds),
+        };
+        plugin.onUpdate(updatedData);
+        setData({ ...plugin.data }); // Update local state
+      },
+    );
+
+    return () => unsubscribe();
+  }, [plugin]);
 
   const WeatherIcon = getWeatherIcon(data.condition);
 
@@ -98,7 +98,9 @@ function WeatherComponent({ plugin }: WeatherComponentProps) {
             <span className="text-muted-foreground capitalize">{data.condition}</span>
           </div>
           <div className="text-sm text-muted-foreground">Counter value: {counterValue}</div>
-          <div className="text-sm text-muted-foreground">Last updated: {new Date(data.lastUpdate).toLocaleTimeString()}</div>
+          <div className="text-sm text-muted-foreground">
+            Last updated: {new Date(data.lastUpdate).toLocaleTimeString()}
+          </div>
         </div>
       </CardContent>
     </Card>
@@ -121,7 +123,7 @@ function getWeatherIcon(condition: WeatherData['condition']) {
 
 function getConditionForTemperature(
   temp: number,
-  thresholds: WeatherConfig['tempThresholds'] = { cold: 10, mild: 20, hot: 30 }
+  thresholds: WeatherConfig['tempThresholds'] = { cold: 10, mild: 20, hot: 30 },
 ): WeatherData['condition'] {
   if (temp < thresholds.cold) return 'cloudy';
   if (temp < thresholds.mild) return 'sunny';

@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  PluginBase,
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  Button,
-} from '@dimelords/shared';
+import { PluginBase, Card, CardHeader, CardTitle, CardContent, Button } from '@dimelords/shared';
 import '@dimelords/shared/styles.css';
 import { CounterData, CounterConfig } from './types';
 import { Plus, Minus } from 'lucide-react';
@@ -32,7 +25,7 @@ export class CounterPlugin extends PluginBase<CounterData, CounterConfig> {
     );
   }
 
-  onUpdate(data: Partial<CounterData>): void {    
+  onUpdate(data: Partial<CounterData>): void {
     this.data = {
       ...this.data,
       ...data,
@@ -68,12 +61,11 @@ function CounterComponent({ plugin }: CounterComponentProps) {
 
   const handleIncrement = () => {
     handleUpdate({ value: data.value + data.increment });
-
   };
 
   const handleDecrement = () => {
     handleUpdate({ value: data.value - data.increment });
-};
+  };
 
   return (
     <Card className="w-[350px]">
