@@ -1,5 +1,5 @@
 {
-  "name": "@dimelords/weather-plugin",
+  "name": "@dimelords/counter-plugin",
   "private": false,
   "version": "2.0.0",
   "main": "dist/index.js",
