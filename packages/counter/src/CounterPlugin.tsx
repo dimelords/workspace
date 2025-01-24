@@ -87,5 +87,3 @@ function CounterComponent({ plugin }: CounterComponentProps) {
     </Card>
   );
 }
-
-export default CounterPlugin;

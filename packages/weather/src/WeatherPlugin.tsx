@@ -135,5 +135,3 @@ function getConditionForTemperature(
   if (temp < thresholds.hot) return 'sunny';
   return 'stormy';
 }
-
-export default WeatherPlugin;
