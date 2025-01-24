@@ -1,5 +1,17 @@
 # @dimelords/weather-plugin
 
+## 2.5.0
+
+### Minor Changes
+
+- dsaf
+
+## 2.4.0
+
+### Minor Changes
+
+- c0d9b51: named export
+
 ## 2.3.0
 
 ### Minor Changes
