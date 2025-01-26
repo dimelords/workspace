@@ -3,6 +3,7 @@ import nodeResolve from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
 import { dts } from 'rollup-plugin-dts';
 import postcss from 'rollup-plugin-postcss';
+import terser from '@rollup/plugin-terser';
 
 export function createConfig(packageJson) {
   return [
@@ -35,7 +36,7 @@ export function createConfig(packageJson) {
           declaration: true,
           declarationDir: './dist/types',
           jsx: 'react',
-        }),
+        }),        
       ],
       external: ['react', 'react-dom', '@dimelords/shared', /\.css$/],
     },

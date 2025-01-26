@@ -1,7 +1,7 @@
 {
   "name": "@dimelords/counter-plugin",
   "private": false,
-  "version": "2.6.0",
+  "version": "2.7.0",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -14,5 +14,8 @@
     "dev": "rollup -c -w",
     "lint": "eslint src/**/*.ts*",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+  },
+  "dependencies": {
+    "@dimelords/shared": "0.3.5"
   }
 }
