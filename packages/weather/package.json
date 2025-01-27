@@ -1,7 +1,7 @@
 {
   "name": "@dimelords/weather-plugin",
   "private": false,
-  "version": "2.7.1",
+  "version": "2.7.2",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",

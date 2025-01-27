@@ -1,5 +1,11 @@
 # @dimelords/weather-plugin
 
+## 2.7.2
+
+### Patch Changes
+
+- federation
+
 ## 2.7.1
 
 ### Patch Changes

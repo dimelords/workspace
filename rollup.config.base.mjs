@@ -3,7 +3,7 @@ import nodeResolve from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
 import { dts } from 'rollup-plugin-dts';
 import postcss from 'rollup-plugin-postcss';
-import terser from '@rollup/plugin-terser';
+import federation from '@module-federation/rollup-federation';
 
 export function createConfig(packageJson) {
   return [
@@ -36,7 +36,20 @@ export function createConfig(packageJson) {
           declaration: true,
           declarationDir: './dist/types',
           jsx: 'react',
-        }),        
+        }), 
+        federation({			
+			shared: {
+				react: {
+                    eager: true,
+                    singleton: true,  
+                    requiredVersion: '^18.2.0'                  
+                  },
+                  "react-dom": {
+                    eager: true,
+                    singleton: true,
+                    requiredVersion: '^18.2.0'
+                  }}}),
+		       
       ],
       external: ['react', 'react-dom', '@dimelords/shared', /\.css$/],
       globals: {
