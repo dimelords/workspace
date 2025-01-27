@@ -39,6 +39,11 @@ export function createConfig(packageJson) {
         }),        
       ],
       external: ['react', 'react-dom', '@dimelords/shared', /\.css$/],
+      globals: {
+        'react': 'React',
+        'react-dom': 'ReactDOM',
+        '@dimelords/shared': 'DimelordShared'
+      },
     },
     {
       input: 'dist/types/index.d.ts',
