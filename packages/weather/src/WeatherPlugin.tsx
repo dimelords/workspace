@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { PluginBase, Message, Card, CardHeader, CardTitle, CardContent, sharedMessageBus } from '@dimelords/shared';
+import {
+  PluginBase,
+  Message,
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  sharedMessageBus,
+} from '@dimelords/shared';
 import '@dimelords/shared/styles.css';
 import { WeatherData, WeatherConfig } from './types';
 import { Cloud, Sun, CloudRain, CloudLightning } from 'lucide-react';
@@ -7,20 +15,25 @@ import { WEATHER_UPDATE, COUNTER_UPDATE, manifest } from './manifest';
 
 export class WeatherPlugin extends PluginBase<WeatherData, WeatherConfig> {
   constructor(id: string, initialData?: Partial<WeatherData>, config?: WeatherConfig) {
-    super(id, manifest, {
-      temperature: initialData?.temperature ?? 20,
-      condition: initialData?.condition ?? 'sunny',
-      lastUpdate: new Date().toISOString(),
-    }, {
-      location: 'Default Location',
-      tempThresholds: {
-        cold: 10,
-        mild: 20,
-        hot: 30,
-        ...config?.tempThresholds,
+    super(
+      id,
+      manifest,
+      {
+        temperature: initialData?.temperature ?? 20,
+        condition: initialData?.condition ?? 'sunny',
+        lastUpdate: new Date().toISOString(),
       },
-      ...config,
-    });
+      {
+        location: 'Default Location',
+        tempThresholds: {
+          cold: 10,
+          mild: 20,
+          hot: 30,
+          ...config?.tempThresholds,
+        },
+        ...config,
+      },
+    );
   }
 
   onUpdate(data: Partial<WeatherData>): void {
@@ -35,7 +48,7 @@ export class WeatherPlugin extends PluginBase<WeatherData, WeatherConfig> {
       source: this.id,
       payload: this.data,
       timestamp: Date.now(),
-      messageId: crypto.randomUUID()
+      messageId: crypto.randomUUID(),
     });
   }
 
