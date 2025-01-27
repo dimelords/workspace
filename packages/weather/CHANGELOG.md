@@ -1,5 +1,11 @@
 # @dimelords/weather-plugin
 
+## 2.7.3
+
+### Patch Changes
+
+- umd
+
 ## 2.7.2
 
 ### Patch Changes

@@ -11,13 +11,19 @@ export function createConfig(packageJson) {
       input: 'src/index.ts',
       output: [
         {
-            dir: 'dist',
-            entryFileNames: '[name].mjs',
-            format: 'esm',
-            sourcemap: true,
-            preserveModules: true,
-            preserveModulesRoot: 'src'
-          },
+          dir: 'dist',
+          entryFileNames: '[name].mjs',
+          format: 'esm',
+          sourcemap: true,
+          preserveModules: true,
+          preserveModulesRoot: 'src',
+        },
+        {
+          file: 'dist/index.umd.js',
+          format: 'umd',
+          name: '[name]',
+          sourcemap: true,
+        },
       ],
       plugins: [
         nodeResolve({
@@ -36,26 +42,27 @@ export function createConfig(packageJson) {
           declaration: true,
           declarationDir: './dist/types',
           jsx: 'react',
-        }), 
-        federation({			
-			shared: {
-				react: {
-                    eager: true,
-                    singleton: true,  
-                    requiredVersion: '^18.2.0'                  
-                  },
-                  "react-dom": {
-                    eager: true,
-                    singleton: true,
-                    requiredVersion: '^18.2.0'
-                  }}}),
-		       
+        }),
+        federation({
+          shared: {
+            react: {
+              eager: true,
+              singleton: true,
+              requiredVersion: '^18.2.0',
+            },
+            'react-dom': {
+              eager: true,
+              singleton: true,
+              requiredVersion: '^18.2.0',
+            },
+          },
+        }),
       ],
       external: ['react', 'react-dom', '@dimelords/shared', /\.css$/],
       globals: {
-        'react': 'React',
+        react: 'React',
         'react-dom': 'ReactDOM',
-        '@dimelords/shared': 'DimelordShared'
+        '@dimelords/shared': 'DimelordShared',
       },
     },
     {
