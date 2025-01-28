@@ -19,7 +19,7 @@ interface CounterUpdateMessage extends Message<{ value: number }> {
   type: typeof COUNTER_UPDATE;
 }
 
-export class CounterPlugin extends PluginBase<CounterData, CounterConfig> {
+export default class CounterPlugin extends PluginBase<CounterData, CounterConfig> {
   private messageHandler: MessageHandler = (message: Message) => {
     if (message.type === COUNTER_UPDATE && message.source !== this.id) {
       const counterMessage = message as CounterUpdateMessage;
