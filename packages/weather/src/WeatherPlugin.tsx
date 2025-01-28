@@ -13,7 +13,7 @@ import { WeatherData, WeatherConfig } from './types';
 import { Cloud, Sun, CloudRain, CloudLightning } from 'lucide-react';
 import { WEATHER_UPDATE, COUNTER_UPDATE, manifest } from './manifest';
 
-export class WeatherPlugin extends PluginBase<WeatherData, WeatherConfig> {
+export default class WeatherPlugin extends PluginBase<WeatherData, WeatherConfig> {
   constructor(id: string, initialData?: Partial<WeatherData>, config?: WeatherConfig) {
     super(
       id,

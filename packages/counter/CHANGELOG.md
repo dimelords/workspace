@@ -1,5 +1,11 @@
 # @dimelords/counter-plugin
 
+## 2.8.0
+
+### Minor Changes
+
+- something
+
 ## 2.7.5
 
 ### Patch Changes

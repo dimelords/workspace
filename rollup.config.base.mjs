@@ -10,26 +10,27 @@ export function createConfig(packageJson) {
   return [
     {
       input: 'src/index.ts',
+      sourcemap: true,
       external: ['react', 'react-dom', '@dimelords/shared', 'lucide-react', /\.css$/],
       output: [
         {
           dir: 'dist',
           entryFileNames: '[name].mjs',
           format: 'esm',
-          sourcemap: true,
           preserveModules: true,
-          preserveModulesRoot: 'src',          
+          sourcemap: true,
+          preserveModulesRoot: 'src',
         },
         {
           file: 'dist/index.umd.js',
           format: 'umd',
-          name: packageJson.name.replace('@', '').replace('/', '-'),
-          sourcemap: true,
+          name: 'CounterPlugin',
+          exports: 'default',
           globals: {
             react: 'React',
             'react-dom': 'ReactDOM',
             'lucide-react': 'LucideReact',
-            '@dimelords/shared': 'DimelordShared'
+            '@dimelords/shared': 'DimelordShared',
           },
         },
       ],

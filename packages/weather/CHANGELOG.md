@@ -1,5 +1,11 @@
 # @dimelords/weather-plugin
 
+## 2.8.0
+
+### Minor Changes
+
+- something
+
 ## 2.7.4
 
 ### Patch Changes
