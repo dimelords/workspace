@@ -1,2 +1,3 @@
-export { default } from './CounterPlugin';
+import CounterPlugin from './CounterPlugin';
+export default CounterPlugin;
 export * from './types';

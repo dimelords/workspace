@@ -20,10 +20,13 @@ interface CounterUpdateMessage extends Message<{ value: number }> {
 }
 
 export default class CounterPlugin extends PluginBase<CounterData, CounterConfig> {
-  private messageHandler: MessageHandler = (message: Message) => {
+  private isExternalUpdate = false;
+  private messageHandler: MessageHandler = (message: Message) => {  
     if (message.type === COUNTER_UPDATE && message.source !== this.id) {
       const counterMessage = message as CounterUpdateMessage;
+      this.isExternalUpdate = true;
       this.onUpdate({ value: counterMessage.payload.value });
+      this.isExternalUpdate = false;
     }
   };
 
@@ -48,14 +51,15 @@ export default class CounterPlugin extends PluginBase<CounterData, CounterConfig
       ...data,
       lastUpdate: new Date().toISOString(),
     };
-
-    sharedMessageBus.publish({
-      type: COUNTER_UPDATE,
-      source: this.id,
-      payload: { value: this.data.value },
-      timestamp: Date.now(),
-      messageId: crypto.randomUUID(),
-    });
+    if (!this.isExternalUpdate) {
+      sharedMessageBus.publish({
+        type: COUNTER_UPDATE,
+        source: this.id,
+        payload: { value: this.data.value },
+        timestamp: Date.now(),
+        messageId: crypto.randomUUID(),
+      });
+    }
   }
 
   render(): React.ReactNode {
@@ -70,12 +74,12 @@ interface CounterComponentProps {
 function CounterComponent({ plugin }: CounterComponentProps) {
   const [data, setData] = React.useState(plugin.data);
 
-  const handleUpdate = (newData: Partial<CounterData>) => {
+  const handleUpdate = (newData: Partial<CounterData>) => {    
     plugin.onUpdate(newData);
     setData({ ...plugin.data });
   };
 
-  const handleIncrement = () => {
+  const handleIncrement = () => {    
     handleUpdate({ value: data.value + data.increment });
   };
 

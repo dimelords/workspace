@@ -1,2 +1,3 @@
-export { default } from './WeatherPlugin';
+import WeatherPlugin from './WeatherPlugin';
+export default WeatherPlugin;
 export * from './types';
