@@ -1,14 +1,16 @@
-// root/rollup.config.base.mjs
 import nodeResolve from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
 import { dts } from 'rollup-plugin-dts';
 import postcss from 'rollup-plugin-postcss';
-import federation from '@module-federation/rollup-federation';
+import resolve from '@rollup/plugin-node-resolve';
+import terser from '@rollup/plugin-terser';
+import babel from '@rollup/plugin-babel';
 
 export function createConfig(packageJson) {
   return [
     {
       input: 'src/index.ts',
+      external: ['react', 'react-dom', '@dimelords/shared', 'lucide-react', /\.css$/],
       output: [
         {
           dir: 'dist',
@@ -16,16 +18,29 @@ export function createConfig(packageJson) {
           format: 'esm',
           sourcemap: true,
           preserveModules: true,
-          preserveModulesRoot: 'src',
+          preserveModulesRoot: 'src',          
         },
         {
           file: 'dist/index.umd.js',
           format: 'umd',
-          name: '[name]',
+          name: packageJson.name.replace('@', '').replace('/', '-'),
           sourcemap: true,
+          globals: {
+            react: 'React',
+            'react-dom': 'ReactDOM',
+            'lucide-react': 'LucideReact',
+            '@dimelords/shared': 'DimelordShared'
+          },
         },
       ],
       plugins: [
+        resolve(),
+        babel({
+          presets: ['@babel/preset-react'],
+          exclude: 'node_modules/**',
+          babelHelpers: 'bundled',
+        }),
+        terser(),
         nodeResolve({
           extensions: ['.js', '.jsx', '.ts', '.tsx', '.css'],
         }),
@@ -43,27 +58,7 @@ export function createConfig(packageJson) {
           declarationDir: './dist/types',
           jsx: 'react',
         }),
-        federation({
-          shared: {
-            react: {
-              eager: true,
-              singleton: true,
-              requiredVersion: '^18.2.0',
-            },
-            'react-dom': {
-              eager: true,
-              singleton: true,
-              requiredVersion: '^18.2.0',
-            },
-          },
-        }),
       ],
-      external: ['react', 'react-dom', '@dimelords/shared', /\.css$/],
-      globals: {
-        react: 'React',
-        'react-dom': 'ReactDOM',
-        '@dimelords/shared': 'DimelordShared',
-      },
     },
     {
       input: 'dist/types/index.d.ts',
