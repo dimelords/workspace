@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   PluginBase,
   Message,
@@ -14,6 +13,8 @@ import '@dimelords/shared/styles.css';
 import { CounterData, CounterConfig } from './types';
 import { Plus, Minus } from 'lucide-react';
 import { COUNTER_UPDATE, manifest } from './manifest';
+
+const React = (window as any).React || window.React;
 
 interface CounterUpdateMessage extends Message<{ value: number }> {
   type: typeof COUNTER_UPDATE;

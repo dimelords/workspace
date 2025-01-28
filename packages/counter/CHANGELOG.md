@@ -1,5 +1,11 @@
 # @dimelords/counter-plugin
 
+## 2.9.1
+
+### Patch Changes
+
+- React
+
 ## 2.9.0
 
 ### Minor Changes

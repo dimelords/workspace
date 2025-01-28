@@ -1,7 +1,7 @@
 {
   "name": "@dimelords/counter-plugin",
   "private": false,
-  "version": "2.9.0",
+  "version": "2.9.1",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
